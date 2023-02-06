@@ -55,6 +55,9 @@ class Post(models.Model):
     # связь с тегом
     # много-много
     tags = models.ManyToManyField(Tag)
+    # Картинка
+    # 2 варианта хранения пикч 1 -в базе 2 -на диске
+    image = models.ImageField(upload_to='posts', null=True, blank=True)
 
     def __str__(self):
         return self.name

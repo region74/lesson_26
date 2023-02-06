@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Post
 
 
@@ -14,5 +14,5 @@ def create_post(request):
 
 
 def post(request, id):
-    post = Post.objects.get(id=id)
+    post = get_object_or_404(Post, id=id)
     return render(request, 'blogapp/post.html', context={'post': post})
