@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+
+{% block title%}
+Контакты
+{%endblock%}
+{%block content%}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <p>Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as
+            possible!</p>
+        <div class="my-5">
+
+            <form method="post" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                {% csrf_token %}
+                {{form.as_ul}}
+                <button class="btn btn-primary text-uppercase disabled" id="submitButton" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{%endblock%}

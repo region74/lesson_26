@@ -1,0 +1,16 @@
+{% extends "base.html"%}
+{% block title %}
+Удаление тега {{object.name}}
+{% endblock %}
+{% block content %}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        {{object.name}}
+    </div>
+    Удалить данный тег?
+    <form method="post">
+        {%csrf_token%}
+        <button type="submit " class="btn btn-danger">Подтвердить удаление</button>
+    </form>
+</div>
+{% endblock %}
