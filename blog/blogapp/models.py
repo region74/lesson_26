@@ -1,6 +1,23 @@
 from django.db import models
 
 
+# 3 типа наследования джанго
+# абстрактный класс
+# класическое наследование
+# прокси
+
+class TimeStamp(models.Model):
+    """
+    Адстрактное наследование - для нее не создаются новые таблицы
+    данные хранятся в каждом наследнике
+    """
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 # Create your models here.
 
 class Category(models.Model):
@@ -44,11 +61,9 @@ class Tag(models.Model):
         return self.name
 
 
-class Post(models.Model):
+class Post(TimeStamp):
     name = models.CharField(max_length=50, unique=True)
     text = models.TextField()
-    create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
     # Связь с категорией
     # один много
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -61,3 +76,20 @@ class Post(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Классическое наследование
+# obj=CoreObjects.object.all()
+# obj.tag
+# obj.post
+
+# class CoreObject(models.Model):
+#     name = models.CharField(max_length=20)
+#
+#
+# class Car(CoreObject):
+#     description = models.TextField(max_length=50)
+#
+#
+# class Flyboard(CoreObject):
+#     description = models.TextField(max_length=50)
