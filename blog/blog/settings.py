@@ -131,3 +131,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Переназанчение модели пользователя
 AUTH_USER_MODEL='userapp.BlogUser'
+
+# переходы
+# куда идти после логина
+LOGIN_REDIRECT_URL='/'
+# после выхода
+LOGOUT_REDIRECT_URL='/'
+
+# куда идти на логин
+LOGIN_URL='/user/login/'

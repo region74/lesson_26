@@ -1,4 +1,5 @@
 from django.db import models
+from userapp.models import BlogUser
 
 
 # 3 типа наследования джанго
@@ -22,7 +23,7 @@ class TimeStamp(models.Model):
 
 class Category(models.Model):
     # Id не надо
-    name = models.CharField(max_length=20, unique=True,verbose_name='Name')
+    name = models.CharField(max_length=20, unique=True, verbose_name='Name')
     # Бланк это тип поле может быть пустым
     description = models.TextField(blank=True)
 
@@ -77,6 +78,7 @@ class Post(TimeStamp):
     # Картинка
     # 2 варианта хранения пикч 1 -в базе 2 -на диске
     image = models.ImageField(upload_to='posts', null=True, blank=True)
+    user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
