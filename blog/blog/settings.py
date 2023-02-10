@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blogapp'
+    'blogapp',
+    'userapp'
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # вывод в файл
 # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
+
+# Переназанчение модели пользователя
+AUTH_USER_MODEL='userapp.BlogUser'

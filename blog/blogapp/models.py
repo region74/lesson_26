@@ -22,9 +22,13 @@ class TimeStamp(models.Model):
 
 class Category(models.Model):
     # Id не надо
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=True,verbose_name='Name')
     # Бланк это тип поле может быть пустым
     description = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
     # # основыне типы полей
     # # дата
@@ -76,7 +80,6 @@ class Post(TimeStamp):
 
     def __str__(self):
         return self.name
-
 
 # Классическое наследование
 # obj=CoreObjects.object.all()
