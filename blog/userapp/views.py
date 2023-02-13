@@ -16,5 +16,4 @@ class UserCreateView(CreateView):
     form_class = RegistrationForm
     success_url = reverse_lazy('userapp:login')
 
-
 # Create your views here.

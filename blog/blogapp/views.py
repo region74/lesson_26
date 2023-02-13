@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, AccessMixin
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Tag
@@ -37,11 +39,14 @@ def contact_view(request):
         return render(request, 'blogapp/contact.html', context={'form': form})
 
 
+# Может читать только админ
+@user_passes_test(lambda u: u.is_superuser)
 def post(request, id):
     post = get_object_or_404(Post, id=id)
     return render(request, 'blogapp/post.html', context={'post': post})
 
 
+@login_required
 def create_post(request):
     if request.method == 'GET':
         form = PostForm()
@@ -49,10 +54,13 @@ def create_post(request):
     else:
         form = PostForm(request.POST, files=request.FILES)
         if form.is_valid():
+            # добавить в форму текущего пользователя, request user -ткущий польщователь
+            form.instance.user = request.user
             form.save()
             return HttpResponseRedirect(reverse('blog:main'))
         else:
             return render(request, 'blogapp/create.html', context={'form': form})
+
 
 class NameContextMixin(ContextMixin):
     def get_context_data(self, *args, **kwargs):
@@ -70,7 +78,7 @@ class NameContextMixin(ContextMixin):
 # CRUD
 
 # список тегов
-class TagListView(ListView,NameContextMixin):
+class TagListView(ListView, NameContextMixin):
     model = Tag
     template_name = 'blogapp/tag_list.html'
 
@@ -78,12 +86,18 @@ class TagListView(ListView,NameContextMixin):
     # context_object_name = 'tags'
 
 
-
 # детальная инфа
-class TagDetailView(DetailView,NameContextMixin):
+# UserPassesTestMixin
+class TagDetailView(UserPassesTestMixin, AccessMixin, DetailView, NameContextMixin):
     model = Tag
     template_name = 'blogapp/detail_tag.html'
 
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    # Это крч со свезкой с test_func, чтобы он не выкидывал 403 ошибку, а перенаправлял
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('userapp:login'))
 
     def get_queryset(self):
         """
@@ -113,7 +127,8 @@ class TagDetailView(DetailView,NameContextMixin):
 
 
 # создание тега
-class TagCreateView(CreateView):
+# Важно LoginRequiredMixin -должен идти первым
+class TagCreateView(LoginRequiredMixin, CreateView, NameContextMixin):
     # form_class=
     fields = '__all__'
     model = Tag
@@ -136,6 +151,8 @@ class TagCreateView(CreateView):
         :param form:
         :return:
         """
+        # это если нужно в классах связать с другой моделью
+        # form.instance.user = self.request.user
         return super().form_valid(form)
 
 

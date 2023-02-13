@@ -22,4 +22,4 @@ class PostForm(forms.ModelForm):
         fields = '__all__'
         # fields = ('name', 'category')
         # скрыть поле
-        # exclude = ('tags',)
+        exclude = ('user',)
