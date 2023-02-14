@@ -81,12 +81,14 @@ class Post(TimeStamp):
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f'{self.name},category:{self.category.name}'
 
     def has_image(self):
         return bool(self.image)
+
     def some_method(self):
         return 'Hi from method'
+
 # Классическое наследование
 # obj=CoreObjects.object.all()
 # obj.tag
