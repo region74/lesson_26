@@ -16,7 +16,15 @@
                         <p class="post-meta">
                             Posted by
                             <a href="#!">Start Bootstrap</a>
-                            on September 24, 2022
+                            on September 24, 2023
+                            {%if item.has_image%}
+                            Пикча есть
+                            {%else%}
+                            Пикчи нет
+                            {%endif%}
+
+                            {{item.has_image}}
+                            {{item.some_method}}
                         </p>
                     </div>
                     <!-- Divider-->

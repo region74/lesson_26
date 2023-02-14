@@ -83,6 +83,10 @@ class Post(TimeStamp):
     def __str__(self):
         return self.name
 
+    def has_image(self):
+        return bool(self.image)
+    def some_method(self):
+        return 'Hi from method'
 # Классическое наследование
 # obj=CoreObjects.object.all()
 # obj.tag
