@@ -6,7 +6,7 @@ from mixer.backend.django import mixer
 
 
 # faker - простые данные, например случайно имя
-# FactoruBoy    - данные для конкретной модели django
+# FactoruBoy - данные для конкретной модели django
 # mixer - полностью создать fake модель
 
 # Create your tests here.
