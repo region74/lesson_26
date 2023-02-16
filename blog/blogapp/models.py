@@ -84,6 +84,11 @@ class Post(TimeStamp):
     def __str__(self):
         return f'{self.name},category:{self.category.name}'
 
+    def display_tags(self):
+        tags=self.tags.all()
+        result=';'.join([item.name for item in tags])
+        return result
+
     def has_image(self):
         return bool(self.image)
 
