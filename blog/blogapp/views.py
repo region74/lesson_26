@@ -7,13 +7,23 @@ from .models import Post, Tag
 from .forms import ContactForm, PostForm
 from django.core.mail import send_mail
 from django.views.generic.base import ContextMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
 
 def main_view(request):
     posts = Post.objects.all()
-    return render(request, 'blogapp/index.html', context={'posts': posts})
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    title = 'главная'
+    return render(request, 'blogapp/index.html', context={'posts': posts, 'title': title})
 
 
 def contact_view(request):
@@ -81,6 +91,13 @@ class NameContextMixin(ContextMixin):
 class TagListView(ListView, NameContextMixin):
     model = Tag
     template_name = 'blogapp/tag_list.html'
+    paginate_by = 2
+
+    def get_queryset(self):
+        """
+        Получение данных
+        """
+        return Tag.objects.all()
 
     # если мы хотим чтобы в шаблоне было не objects:
     # context_object_name = 'tags'

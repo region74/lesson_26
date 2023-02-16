@@ -1,38 +1,57 @@
 {% extends "base.html"%}
 
 {% block title %}
-    Главная страница
+Главная страница
 {% endblock %}
 {% block content%}
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    {%for item in posts%}
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                        <a href="{% url 'blog:post' id=item.id%}">
-                            <h2 class="post-title">{{item.name}}</h2>
-                            <h3 class="post-subtitle">Описание чего то</h3>
-                        </a>
-                        <p class="post-meta">
-                            Posted by
-                            <a href="#!">Start Bootstrap</a>
-                            on September 24, 2023
-                            {%if item.has_image%}
-                            Пикча есть
-                            {%else%}
-                            Пикчи нет
-                            {%endif%}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    Количество постов: {{posts|length}}
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        {%for item in posts%}
+        <!-- Post preview-->
+        <div class="post-preview">
+            <a href="{% url 'blog:post' id=item.id%}">
+                <h2 class="post-title">{{item.name}}</h2>
+                <h3 class="post-subtitle">Описание чего то</h3>
+            </a>
+            <p class="post-meta">
+                Posted by
+                <a href="#!">Start Bootstrap</a>
+                on September 24, 2023
+                {%if item.has_image%}
+                Пикча есть
+                {%else%}
+                Пикчи нет
+                {%endif%}
 
-                            {{item.has_image}}
-                            {{item.some_method}}
-                        </p>
-                    </div>
-                    <!-- Divider-->
-                    <hr class="my-4" />
-                    {% endfor %}
-                    <!-- Post preview-->
-                    <!-- Pager-->
-                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
-                </div>
-                </div>
+                {{item.has_image}}
+                {{item.some_method}}
+            </p>
+        </div>
+        <!-- Divider-->
+        <hr class="my-4"/>
+        {% endfor %}
+        <!-- Post preview-->
+        <!-- Pager-->
+        <div class="pagination justify-content-end">
+                <span class="pagination justify-content-end">
+                {% if posts.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ posts.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="pagination justify-content-end">
+                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                </span>
+
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}"> next </a>
+                    <a href="?page={{ posts.paginator.num_pages }}"> last &raquo;</a>
+                {% endif %}
+                </span>
+        </div>
+        <!--        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts-->
+        <!--            →</a></div>-->
+    </div>
+</div>
 {% endblock %}
