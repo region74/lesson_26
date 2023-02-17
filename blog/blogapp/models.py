@@ -7,11 +7,26 @@ from userapp.models import BlogUser
 # класическое наследование
 # прокси
 
-class IsActiveMixin(models.Model):
-    is_active = models.BooleanField(default=False)
-    class Meta:
-        abstract=True
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        all_objects = super().get_queryset()
+        return all_objects.filter(is_active=True)
 
+
+class IsActiveMixin(models.Model):
+    objects = models.Manager()
+    active_objects = ActiveManager()
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+# class UpdatedObjectsManager(models.Manager):
+#     def get_queryset(self):
+#         all_objects = super().get_queryset()
+#         # Дата обновления не равна дате создания F-запрос
+#         return all_objects.filter(update)
 
 
 class TimeStamp(models.Model):
@@ -66,6 +81,10 @@ class Category(models.Model):
         return self.name
 
 
+class Chiled(ActiveManager):
+    pass
+
+
 class Tag(IsActiveMixin):
     name = models.CharField(max_length=40, unique=True)
 
@@ -73,7 +92,7 @@ class Tag(IsActiveMixin):
         return self.name
 
 
-class Post(TimeStamp,IsActiveMixin):
+class Post(TimeStamp, IsActiveMixin):
     name = models.CharField(max_length=50, unique=True)
     text = models.TextField()
     # Связь с категорией
@@ -88,13 +107,12 @@ class Post(TimeStamp,IsActiveMixin):
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(default=1)
 
-
     def __str__(self):
         return f'{self.name},category:{self.category.name}'
 
     def display_tags(self):
-        tags=self.tags.all()
-        result=';'.join([item.name for item in tags])
+        tags = self.tags.all()
+        result = ';'.join([item.name for item in tags])
         return result
 
     def has_image(self):
