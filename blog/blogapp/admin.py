@@ -11,12 +11,33 @@ def clear_rating(modeladmin, request, queryset):
 clear_rating.short_description = 'Выставить рейтинг 2'
 
 
+def set_active(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+
+set_active.short_description = 'Активировать'
+
+
+def set_passive(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
+set_passive.short_description = 'Деактивировать'
+
+
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['name', 'text', 'category', 'display_tags']
-    actions = [clear_rating]
+    list_display = ['name', 'text', 'category', 'display_tags', 'is_active']
+    actions = [clear_rating, set_active, set_passive]
 
 
 admin.site.register(Post, PostAdmin)
-admin.site.register(Tag)
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active']
+    actions = [set_active, set_passive]
+
+
+admin.site.register(Tag, TagAdmin)
 
 # Register your models here.

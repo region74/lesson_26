@@ -13,8 +13,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def main_view(request):
-    posts = Post.objects.all()
-    paginator = Paginator(posts, 2)
+    # posts = Post.objects.all()
+    posts = Post.objects.filter(is_active=True)
+    paginator = Paginator(posts, 5)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -97,7 +98,7 @@ class TagListView(ListView, NameContextMixin):
         """
         Получение данных
         """
-        return Tag.objects.all()
+        return Tag.objects.filter(is_active=True)
 
     # если мы хотим чтобы в шаблоне было не objects:
     # context_object_name = 'tags'

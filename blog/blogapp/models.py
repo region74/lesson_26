@@ -7,6 +7,13 @@ from userapp.models import BlogUser
 # класическое наследование
 # прокси
 
+class IsActiveMixin(models.Model):
+    is_active = models.BooleanField(default=False)
+    class Meta:
+        abstract=True
+
+
+
 class TimeStamp(models.Model):
     """
     Адстрактное наследование - для нее не создаются новые таблицы
@@ -59,14 +66,14 @@ class Category(models.Model):
         return self.name
 
 
-class Tag(models.Model):
+class Tag(IsActiveMixin):
     name = models.CharField(max_length=40, unique=True)
 
     def __str__(self):
         return self.name
 
 
-class Post(TimeStamp):
+class Post(TimeStamp,IsActiveMixin):
     name = models.CharField(max_length=50, unique=True)
     text = models.TextField()
     # Связь с категорией
@@ -80,6 +87,7 @@ class Post(TimeStamp):
     image = models.ImageField(upload_to='posts', null=True, blank=True)
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(default=1)
+
 
     def __str__(self):
         return f'{self.name},category:{self.category.name}'
