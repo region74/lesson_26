@@ -9,13 +9,12 @@ class BlogUser(AbstractUser):
     is_author = models.BooleanField(default=False)
 
     # переопределение метода сейв
-    # def save(self, *args, **kwargs):
-    #     user = super().save(*args, **kwargs)
-    #     # Создать профиль
-    #     # если профиль не создан
-    #     if not Profile.objects.filter(user=user).exists():
-    #         Profile.objects.create(user=user)
-    #     return user
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Создать профиль
+        # если профиль не создан
+        if not Profile.objects.filter(user=self).exists():
+            Profile.objects.create(user=self)
 
 
 # Create your models here.
@@ -26,7 +25,7 @@ class Profile(models.Model):
     user = models.OneToOneField(BlogUser, on_delete=models.CASCADE)
 
 
-@receiver(post_save, sender=BlogUser)
-def create_profile(sender, instance, **kwargs):
-    if not Profile.objects.filter(user=instance).exists():
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=BlogUser)
+# def create_profile(sender, instance, **kwargs):
+#     if not Profile.objects.filter(user=instance).exists():
+#         Profile.objects.create(user=instance)

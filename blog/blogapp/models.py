@@ -97,7 +97,7 @@ class Post(TimeStamp, IsActiveMixin):
     text = models.TextField()
     # Связь с категорией
     # один много
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category_posts')
     # связь с тегом
     # много-много
     tags = models.ManyToManyField(Tag)

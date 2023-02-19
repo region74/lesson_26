@@ -1,0 +1,22 @@
+{% extends "base.html"%}
+{% block title %}
+Свойства категорий
+{% endblock %}
+{% block content %}
+
+<div class="row gx-4 gx-lg-5 justify-content-center">
+
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <h1>{{object.name}}</h1>
+
+    {%for post in object.category_posts.all %}
+    <p>{{post.name}}
+        {% endfor %}
+
+    <form method="post" action="{%url 'blogapp:post_category_create' pk=object.pk%}">
+        {%csrf_token%}
+        {{form.as_p}}
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+{% endblock %}

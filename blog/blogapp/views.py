@@ -3,8 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, 
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Tag
-from .forms import ContactForm, PostForm
+from .models import Post, Tag, Category
+from .forms import ContactForm, PostForm, PostCategoryForm
 from django.core.mail import send_mail
 from django.views.generic.base import ContextMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -25,7 +25,8 @@ def main_view(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     title = 'главная'
-    return render(request, 'blogapp/index.html', context={'posts': posts, 'title': title})
+    joke = 'Заходит мужик в баню'
+    return render(request, 'blogapp/index.html', context={'posts': posts, 'title': title, 'joke': joke})
 
 
 def contact_view(request):
@@ -186,3 +187,34 @@ class DeleteTagView(DeleteView):
     template_name = 'blogapp/tag_delete_confirm.html'
     model = Tag
     success_url = reverse_lazy('blog:tag_list')
+
+
+class CategoryDetailView(DeleteView):
+    template_name = 'blogapp/category_detail.html'
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PostCategoryForm()
+        return context
+
+
+class PostCategoryCreateView(CreateView):
+    model = Post
+    template_name = 'blogapp/category_detail.html'
+    # success_url = reverse_lazy
+    form_class = PostCategoryForm
+
+    def post(self, request, *args, **kwargs):
+        self.category_pk = kwargs['pk']
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = self.request.user
+        form.instance.user = user
+        category = get_object_or_404(Category, pk=self.category_pk)
+        form.instance.category = category
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('blogapp:detail_category', kwargs={'pk': self.category_pk})
