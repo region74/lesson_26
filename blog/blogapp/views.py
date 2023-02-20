@@ -15,8 +15,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def main_view(request):
     # posts = Post.objects.all()
     # posts = Post.objects.filter(is_active=True)
-    posts = Post.active_objects.all()
-    paginator = Paginator(posts, 5)
+    # для оптимизации
+    posts = Post.active_objects.select_related('category','user').all()
+    paginator = Paginator(posts, 1000)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -25,8 +26,7 @@ def main_view(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     title = 'главная'
-    joke = 'Заходит мужик в баню'
-    return render(request, 'blogapp/index.html', context={'posts': posts, 'title': title, 'joke': joke})
+    return render(request, 'blogapp/index.html', context={'posts': posts, 'title': title})
 
 
 def contact_view(request):
@@ -56,6 +56,9 @@ def contact_view(request):
 @user_passes_test(lambda u: u.is_superuser)
 def post(request, id):
     post = get_object_or_404(Post, id=id)
+    all_tags = post.get_all_tags
+    for item in all_tags:
+        print(item)
     return render(request, 'blogapp/post.html', context={'post': post})
 
 

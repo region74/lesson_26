@@ -23,11 +23,14 @@ SECRET_KEY = 'django-insecure-=vm=w9n#)z&xucgpt)$ort4qv0&^2+3#=uqs&=f((9fj)@=6!o
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+if DEBUG:
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
 
 ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,11 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'blogapp',
     'userapp',
-    'capapp'
-]
+    'capapp',
 
+]
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'blog.urls'
@@ -113,7 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
@@ -132,13 +140,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
 
 # Переназанчение модели пользователя
-AUTH_USER_MODEL='userapp.BlogUser'
+AUTH_USER_MODEL = 'userapp.BlogUser'
 
 # переходы
 # куда идти после логина
-LOGIN_REDIRECT_URL='/'
+LOGIN_REDIRECT_URL = '/'
 # после выхода
-LOGOUT_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL = '/'
 
 # куда идти на логин
-LOGIN_URL='/user/login/'
+LOGIN_URL = '/user/login/'
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

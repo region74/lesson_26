@@ -1,12 +1,25 @@
 {% extends "base.html"%}
 {% block title %}
-    {{post.name}}
+{{post.name}}
 {% endblock %}
 {% block content %}
 <div class="row gx-4 gx-lg-5 justify-content-center">
     <div class="col-md-10 col-lg-8 col-xl-7">
-        {{post.text|safe}}
-        <img src="{{post.image.url}}" width="800" height="400">
+        {%with all_tags=post.get_all_tags%}
+            {%for tag in all_tags%}
+            {{tag}}//
+            {%endfor%}
+            <p></p>
+            {{post.text|safe}}
+            <p></p>
+            {%if post.image%}
+            <img src="{{post.image.url}}" width="800" height="400">
+            {%endif%}
+
+            {%for tag in all_tags%}
+            {{tag}}---
+            {%endfor%}
+        {%endwith%}
     </div>
 </div>
 {% endblock %}

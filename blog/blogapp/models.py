@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.functional import cached_property
+
 from userapp.models import BlogUser
 
 
@@ -35,7 +37,8 @@ class TimeStamp(models.Model):
     данные хранятся в каждом наследнике
     """
     create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    # оптимизация ускорится поиск типо от индексирования
+    update = models.DateTimeField(auto_now=True,db_index=True)
 
     class Meta:
         abstract = True
@@ -97,7 +100,7 @@ class Post(TimeStamp, IsActiveMixin):
     text = models.TextField()
     # Связь с категорией
     # один много
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category_posts')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_posts')
     # связь с тегом
     # много-много
     tags = models.ManyToManyField(Tag)
@@ -120,6 +123,11 @@ class Post(TimeStamp, IsActiveMixin):
 
     def some_method(self):
         return 'Hi from method'
+
+    @cached_property
+    def get_all_tags(self):
+        tags = Tag.objects.all()
+        return tags
 
 # Классическое наследование
 # obj=CoreObjects.object.all()

@@ -18,10 +18,39 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# import debug_toolbar
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blogapp.urls', namespace='blog')),
-    path('user/', include('userapp.urls', namespace='userapp'))
+    path('user/', include('userapp.urls', namespace='userapp')),
+    # path('__debug__/', include('debug_toolbar.urls'))
+
 ]
+
 if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns = [
+                      path('__debug__/', include(debug_toolbar.urls)),
+                  ] + urlpatterns
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # if settings.DEBUG:
+    #     import debug_toolbar
+    #     import mimetypes
+    #
+    #     mimetypes.add_type("application/javascript", ".js", True)
+    #
+    #     urlpatterns = [
+    #                       path('__debug__/', include(debug_toolbar.urls)),
+    #                   ] + urlpatterns
+    #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # if settings.DEBUG:
+    #     import mimetypes
+    #     mimetypes.add_type("application/javascript", ".js", True)
+    #
+    # if settings.DEBUG:
+    #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
