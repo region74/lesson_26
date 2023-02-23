@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     'blogapp',
     'userapp',
     'capapp',
+    'django_cleanup.apps.CleanupConfig',
 
 ]
 if DEBUG:
     import mimetypes
+
     mimetypes.add_type("application/javascript", ".js", True)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
