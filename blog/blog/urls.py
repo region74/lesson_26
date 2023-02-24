@@ -18,9 +18,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers, serializers, viewsets
-from blogapp.api_views import CategoryViewSet
+from blogapp.api_views import CategoryViewSet, PostViewSet
+
+# router = routers.DefaultRouter()
+# router.register(r'categories', CategoryViewSet)
+#
+# router_posts = routers.DefaultRouter()
+# router_posts.register(r'posts', PostViewSet)
 
 router = routers.DefaultRouter()
+router.register(r'posts', PostViewSet)
 router.register(r'categories', CategoryViewSet)
 
 # import debug_toolbar
@@ -30,9 +37,11 @@ urlpatterns = [
     path('', include('blogapp.urls', namespace='blog')),
     path('user/', include('userapp.urls', namespace='userapp')),
     path('api-auth/', include('rest_framework.urls')),
-    path('categories/', include(router.urls)),
+    # path('api/ver1/categories/', include(router.urls)),
+    # path('api/ver1/posts/', include(router_posts.urls)),
     # path('__debug__/', include('debug_toolbar.urls'))
-
+    path('api/ver1/', include(router.urls)),
+    # path('api/ver1/posts/', include(router.urls)),
 ]
 
 if settings.DEBUG:

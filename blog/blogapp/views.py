@@ -17,7 +17,7 @@ def main_view(request):
     # posts = Post.objects.filter(is_active=True)
     # для оптимизации
     posts = Post.active_objects.select_related('category','user').all()
-    paginator = Paginator(posts, 1000)
+    paginator = Paginator(posts, 5)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
