@@ -2,7 +2,8 @@ from .models import Category, Post, Tag
 from .serializers import CategorySerializer, PostSerializer, TagSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
-from .permissions import ReadOnly, IsAuthor
+from .permissions import ReadOnly, IsAuthor, IsAuthenticated
+from rest_framework.authentication import BaseAuthentication, SessionAuthentication, TokenAuthentication
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -23,5 +24,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
+    # authentication_classes = [SessionAuthentication, BaseAuthentication, TokenAuthentication]
+    authentication_classes=[SessionAuthentication,BaseAuthentication,TokenAuthentication]
+    # permission_classes = [IsAuthenticated|TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
