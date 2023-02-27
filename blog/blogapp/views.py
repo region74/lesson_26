@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, AccessMixin
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,TemplateView
 from .models import Post, Tag, Category
 from .forms import ContactForm, PostForm, PostCategoryForm
 from django.core.mail import send_mail
@@ -221,3 +221,6 @@ class PostCategoryCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('blogapp:detail_category', kwargs={'pk': self.category_pk})
+
+class SimpleMainAjax(TemplateView):
+    template_name = 'blogapp/simple.html'

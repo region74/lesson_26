@@ -15,4 +15,5 @@ urlpatterns = [
     path('tagdelete/<int:pk>/', views.DeleteTagView.as_view(), name='tag_delete'),
     path('detailcategory/<int:pk>/', views.CategoryDetailView.as_view(), name='detail_category'),
     path('categorypostcreate/<int:pk>', views.PostCategoryCreateView.as_view(), name='post_category_create'),
+    path('simple/', views.SimpleMainAjax.as_view(), name='simple_ajax'),
 ]
