@@ -1,9 +1,13 @@
 from .models import Category, Post, Tag
 from .serializers import CategorySerializer, PostSerializer, TagSerializer
 from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
+from .permissions import ReadOnly
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    # права доступа
+    permission_classes = [IsAdminUser | ReadOnly]
     # queryset = Category.objects.all()
     queryset = Category.objects.select_related().all()
     # queryset = Category.objects.select_related()
