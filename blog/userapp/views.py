@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import RegistrationForm
@@ -31,4 +32,15 @@ def update_token(request):
     else:
         token = Token.objects.create(user=request)
     return HttpResponseRedirect(reverse('userapp:profile', kwargs={'pk': user.pk}))
+
+
+def update_token_ajax(request):
+    user = request.user
+    if user.auth_token:
+        user.auth_token.delete()
+        token = Token.objects.create(user=user)
+    else:
+        token = Token.objects.create(user=user)
+    return JsonResponse({'key': token.key})
+
 # Create your views here.
