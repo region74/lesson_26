@@ -5,11 +5,15 @@
 {%endblock%}
 
 {%block content%}
-Профиль пользователя {{object.username}}
+    Профиль пользователя {{object.username}}
 <hr>
 {%if object.auth_token%}
-{{object.auth_token}}
+    Токен: {{object.auth_token}}
 {%else%}
-не создан
+    Токен не создан!
 {%endif%}
+<hr>
+<form action="{%url 'userapp:update_token'%}">
+    <button type="submit" class="btn btn-primary">Обновить токен</button>
+</form>
 {%endblock%}
