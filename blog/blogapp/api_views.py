@@ -2,7 +2,7 @@ from .models import Category, Post, Tag
 from .serializers import CategorySerializer, PostSerializer, TagSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
-from .permissions import ReadOnly
+from .permissions import ReadOnly, IsAuthor
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     # queryset = Post.objects.all()
     # оптимизируем
+    permission_classes = [IsAuthor | ReadOnly | IsAdminUser]
     queryset = Post.objects.prefetch_related('tags')
     serializer_class = PostSerializer
 
